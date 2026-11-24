@@ -43,7 +43,22 @@ npm run build
 npm run tauri build
 ```
 
-> **macOS 打包说明**：在 macOS Tahoe (26) 及更新版本上，`npm run tauri build` 的 dmg 生成步骤可能因 `/Volumes` 只读而失败（`.app` 会正常产出）。请改用 `./scripts/make-dmg.sh` 一键构建 `.app` 与 `.dmg`。
+> **macOS 打包说明**：在 macOS Tahoe (26) 及更新版本上，`npm run tauri build` 的 dmg 生成步骤可能因 `/Volumes` 只读而失败（`.app` 会正常产出）。请改用 `./scripts/make-dmg.sh` 一键构建 `.app` 与 `.dmg`。该脚本依赖 `scripts/dmg/`（create-dmg 工具，未纳入版本库），首次使用需先获取：
+>
+> ```bash
+> git clone https://github.com/create-dmg/create-dmg.git scripts/dmg
+> ```
+
+## 打包与发布（CI）
+
+项目已配置 GitHub Actions 工作流（`.github/workflows/release.yml`），推送 `v*` 标签即可自动在云端打包 macOS 与 Windows 安装包：
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+构建完成后，产物（macOS `.dmg` / Windows `.msi`、`.exe`）会出现在 GitHub Releases 的 Draft 中，点 Publish 即可公开下载；也可在 Actions 运行的 Artifacts 里直接下载。
 
 ## 数据存储
 
