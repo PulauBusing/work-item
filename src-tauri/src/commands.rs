@@ -34,14 +34,11 @@ fn build_where(f: &ItemFilter) -> (String, Vec<Value>) {
             let r = compute_range(range);
             let s = r.start.format("%Y-%m-%d").to_string();
             let e = r.end.format("%Y-%m-%d").to_string();
+            // 事项在周期内活跃：开始日期不晚于周期最后一天，且（未完成 或 完成日期不早于周期第一天）
             conds.push("start_date <= ?".to_string());
-            vals.push(Value::Text(s));
-            if range == "today" {
-                conds.push("(end_date IS NULL OR end_date = ?)".to_string());
-            } else {
-                conds.push("(end_date IS NULL OR end_date <= ?)".to_string());
-            }
             vals.push(Value::Text(e));
+            conds.push("(end_date IS NULL OR end_date >= ?)".to_string());
+            vals.push(Value::Text(s));
         }
     }
 
